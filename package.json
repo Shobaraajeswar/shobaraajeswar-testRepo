@@ -6,7 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 0",
     "start": "node server/index.js"
   },
-  "author": "Shobaraajeswar Elango",
+  "author": "Shobaraajeswar Elangos",
   "license": "ISC",
   "type": "module",
   "dependencies": {
