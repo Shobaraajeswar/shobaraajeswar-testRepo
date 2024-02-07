@@ -1,14 +1,9 @@
-# This is a basic workflow to help you get started with Actions
+name: PR Workflow
 
-name: CI
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   build:
@@ -18,18 +13,23 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Install dependencies
+    # Add your workflow steps here
+    - name: Run npm install
       run: npm install
 
-    - name: Set up GitHub CLI
-      uses: actions/setup-gh@v0
-      with:
-        gh-version: 'latest'
+    # Additional steps as needed for your workflow
 
     - name: Set PR status
-      if: github.event_name == 'pull_request' && github.event.action != 'closed' && github.event.pull_request.base.ref == 'main'
-      run: gh pr check --success --body "Workflow successful"
+      if: github.event_name == 'pull_request' && github.event.action != 'closed'
+      run: |
+        # Replace the following line with your actual test command
+        npm test
 
-    - name: Set PR status (on failure)
-      if: github.event_name == 'pull_request' && github.event.action != 'closed' && github.event.pull_request.base.ref == 'main' && failure()
-      run: gh pr check --fail --body "Workflow failed"
+        # Set status based on the success or failure of the test
+        if [ $? -eq 0 ]; then
+          echo "Success!"
+          gh pr check --success --body "Tests passed"
+        else
+          echo "Failure!"
+          gh pr check --fail --body "Tests failed"
+        fi
