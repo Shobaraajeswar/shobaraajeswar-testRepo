@@ -18,4 +18,4 @@ jobs:
 
     - name: Set PR status
       if: success()
-      run: gh pr check --success --body "Build succeeded"
+      run: gh pr review ${{ github.event.number }} --approve --body "Build succeeded"
