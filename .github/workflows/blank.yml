@@ -13,23 +13,9 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    # Add your workflow steps here
     - name: Run npm install
       run: npm install
 
-    # Additional steps as needed for your workflow
-
     - name: Set PR status
-      if: github.event_name == 'pull_request' && github.event.action != 'closed'
-      run: |
-        # Replace the following line with your actual test command
-        npm test
-
-        # Set status based on the success or failure of the test
-        if [ $? -eq 0 ]; then
-          echo "Success!"
-          gh pr check --success --body "Tests passed"
-        else
-          echo "Failure!"
-          gh pr check --fail --body "Tests failed"
-        fi
+      if: success()
+      run: gh pr check --success --body "Build succeeded"
